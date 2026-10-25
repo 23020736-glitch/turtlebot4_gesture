@@ -29,11 +29,7 @@ Webcam -> gesture_recognition_node -> /detected_gesture (std_msgs/String)
 Robot chỉ chạy sau khi nhận `Thumb_Up`. Có chống nhiễu (ngưỡng tin cậy, ổn định 6 frame, cooldown 1 s)
 và tự dừng nếu mất tín hiệu hơn 2 giây.
 
-## Yêu cầu
 
-- Ubuntu 22.04, ROS 2 Humble
-- TurtleBot 4 Simulator: `sudo apt install ros-humble-turtlebot4-simulator`
-- Webcam, Python 3
 
 ## Cài đặt và build
 
@@ -49,7 +45,7 @@ colcon build --packages-select turtlebot4_gesture
 source install/setup.bash
 ```
 
-Lần chạy đầu, node nhận diện tự tải model `gesture_recognizer.task` về thư mục home (cần internet).
+
 
 ## Chạy
 
@@ -58,10 +54,7 @@ Lần chạy đầu, node nhận diện tự tải model `gesture_recognizer.tas
 source /opt/ros/humble/setup.bash
 ros2 launch turtlebot4_ignition_bringup turtlebot4_ignition.launch.py world:=maze
 ```
-Đợi khoảng 1–2 phút cho mô phỏng ổn định. Nếu robot không chạy, thử:
-```bash
-ros2 param set /motion_control safety_override full
-```
+
 
 **Terminal 2 – Nhận diện và điều khiển:**
 ```bash
@@ -70,8 +63,6 @@ source ~/ros2_ws/install/setup.bash
 ros2 launch turtlebot4_gesture gesture_control.launch.py
 ```
 
-Quy trình demo: giơ **1 ngón** (hoặc **2 ngón**) → giơ **ngón cái** để xác nhận → robot chạy.
-**Xòe tay** để dừng, **nắm tay** để hủy.
 
 ## Kiểm tra
 
@@ -79,15 +70,6 @@ Quy trình demo: giơ **1 ngón** (hoặc **2 ngón**) → giơ **ngón cái** �
 ros2 topic echo /detected_gesture
 ros2 topic info /cmd_vel
 ```
-
-## Lỗi thường gặp
-
-| Lỗi | Cách xử lý |
-|---|---|
-| Không mở được webcam | Tắt chương trình khác đang dùng webcam, hoặc `--ros-args -p camera_index:=1` |
-| Robot không chạy dù log báo `Bắt đầu` | Kiểm tra Gazebo không bị pause/chậm (`ros2 topic echo /clock`), đặt `safety_override` thành `full` |
-| `/cmd_vel` là `TwistStamped` | Đổi kiểu message trong `robot_behavior_node.py` sang `TwistStamped` |
-| Vòng tròn chạm tường | Giảm tốc độ tiến trong hành vi `circle` (hiện 0.1 m/s, bán kính 0.25 m) |
 
 ## Cấu trúc thư mục
 
